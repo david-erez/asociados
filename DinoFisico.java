@@ -1,9 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
+import java.util.ArrayList;
 public class DinoFisico extends JPanel implements ActionListener, KeyListener {
-
+public class bala {
+public int x,y;
+public int velocidad = 15;
+public bala(int x, int y) {
+    this.x = x;
+    this.y = y;
+}    
+}
+ArrayList<bala> balas = new ArrayList<>();
     // Físicas horizontales
     double masa = 1.0;
     double fuerza = 0.0;
@@ -14,9 +22,7 @@ public class DinoFisico extends JPanel implements ActionListener, KeyListener {
     int sueloOg = 0;
     int velocidadSuelo = 0;
     // disparo de arma blanca
-    int disparoX = -25;
-    int disparoY = -10;
-    boolean disparo = false;
+
     // Físicas verticales
     double posicionY = 190;      // posición vertical (piso)
     double velocidadY = 0.0;     // velocidad vertical
@@ -44,6 +50,7 @@ public class DinoFisico extends JPanel implements ActionListener, KeyListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+   
 
         // Fondo
         g.setColor(new Color(240, 240, 240));
@@ -58,7 +65,7 @@ g.fillRect(sueloOg + getWidth(), sueloY, getWidth(), 50);
 // Textura simple (líneas)
 g.setColor(Color.RED);
 for (int x = sueloOg; x < sueloOg + 2 * getWidth(); x += 40) {
-g.fillRect(x, sueloY + 40, 20, 10); // bloques que se repiten
+g.fillRect(x, sueloY + 40, 110, 50); // bloques que se repiten
 
 
         // Dino
@@ -66,17 +73,62 @@ g.fillRect(x, sueloY + 40, 20, 10); // bloques que se repiten
         g.fillRect((int) posicionX, (int) posicionY, dinoAncho, dinoAlto);
         // Disparo
         g.setColor(Color.RED);
-        g.fillRect(disparoX, (int) posicionY + dinoAlto / 2 - 5, 20, 10);
-    
+        for (bala b : balas){
+        g.fillRect(b.x, b.y + dinoAncho ,10,  10);
+        }
 
         // Velocidades
         g.setColor(Color.BLUE);
         g.drawString(String.format("Velocidad X: %.2f", velocidad), 10, 20);
         g.drawString(String.format("Velocidad Y: %.2f", velocidadY), 10, 40);
-         g.drawString(String.format("fuerza: %.2f", fuerza), 10, 60);
+        g.drawString(String.format("fuerza: %.2f", fuerza), 10, 60);
     }
 }
+public void actionPerformed(ActionEvent e) {
+aceleracion = fuerza / masa;
+velocidad += aceleracion * 0.02;
+posicionX += velocidad * 0.1;
+
+// Física horizontal
+if (aplicarFuerza) {
+    fuerza += 10; 
+if (fuerza > 1000) 
+    fuerza = 1000; // Limita la fuerza máxima
+} else {
+    fuerza = 0; // Sin fuerza si no está presionada
+}
+
+
+//el cuadro dispara
+ArrayList<bala> balaPerdida = new ArrayList<>();
+for (bala b : balas) {
+    b.x += b.velocidad;
+if (b.x > 0) {
+    balaPerdida.add(b);
+}   
+}
+balas.remove(balaPerdida);
+        
+// Si se sale de la pantalla por la derecha, reaparece
+if (posicionX > getWidth()) {
+    posicionX = -dinoAncho;
+}
     
+if (!enElSuelo) {
+    velocidadY += gravedad * 0.02;
+    posicionY += velocidadY * 0.02;
+
+// Colisión con el suelo
+if (posicionY + dinoAlto >= sueloY) {
+    posicionY = sueloY - dinoAlto;
+    velocidadY = 0;
+    enElSuelo = true;
+}
+}
+
+repaint();
+}    
+
 @Override
 public void keyPressed(KeyEvent e) {
 int key = e.getKeyCode();
@@ -87,15 +139,19 @@ if (key == KeyEvent.VK_RIGHT && enElSuelo) {
     aplicarFuerza = true;
 }
 
+
  if (key == KeyEvent.VK_SPACE && enElSuelo) {
     velocidadY = -600;  // impulso de salto
     enElSuelo = false;
 }
-if (key == KeyEvent.VK_A ) {
-    disparoX = (int) posicionX + dinoAncho;
-            
+
+ //esta hace que la bala solo salga una vez
+ if (key == KeyEvent.VK_A){
+   balas.add(new bala((int) posicionX + dinoAncho,(int)posicionY + dinoAlto/525-33));
+    }    
+    
  }
-}
+
 
     @Override
     public void keyReleased(KeyEvent e) {
@@ -112,49 +168,8 @@ if (key == KeyEvent.VK_A ) {
 
        
     }
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // Física horizontal
-        if (aplicarFuerza) {
-            fuerza += 20; 
-            if (fuerza > 1000) fuerza = 1000; // Limita la fuerza máxima
-        } else {
-            fuerza = 0; // Sin fuerza si no está presionada
-        }
-        aceleracion = fuerza / masa;
-        velocidad += aceleracion * 0.02;
-        posicionX += velocidad * 0.1;
-        
-        //el cuadro dispara
-        if (disparoX > 0) {
-            disparoX += 15; // velocidad del disparo
-            if (disparoX > getWidth()) {
-                disparoX = -20; // reinicia el disparo fuera de pantalla
-            }
-        }
-
-        
-
-        // Si se sale de la pantalla por la derecha, reaparece
-        if (posicionX > getWidth()) {
-            posicionX = -dinoAncho;
-        }
-    
-        if (!enElSuelo) {
-            velocidadY += gravedad * 0.02;
-            posicionY += velocidadY * 0.02;
-
-            // Colisión con el suelo
-            if (posicionY + dinoAlto >= sueloY) {
-                posicionY = sueloY - dinoAlto;
-                velocidadY = 0;
-                enElSuelo = true;
-            }
-        }
-
-        repaint();
-    }
-
+ 
+ 
     public static void main(String[] args) {
         JFrame ventana = new JFrame("tu no te lo creeras");
         final DinoFisico panel = new DinoFisico();
