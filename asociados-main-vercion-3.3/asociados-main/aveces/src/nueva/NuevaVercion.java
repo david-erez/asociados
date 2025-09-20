@@ -1,13 +1,13 @@
 package nueva;
+import States.GameState;
+import graficos.Assets;
+import imput.KeyBoard;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import javax.swing.*;
-import States.GameState;
-import graficos.Assets;
-import imput.KeyBoard;
 
 public class NuevaVercion extends JFrame implements Runnable{
 
@@ -20,7 +20,7 @@ private boolean runner=false;
 private BufferStrategy bs;
 private Graphics g;
 
-private final int FPS = 60;
+private final int FPS = 1;
 private double objetivo =  100000000/ FPS; //tiempo requerido para pasar fotograma
 private double delta = 0; //almacena el tiempo temporal al tiempo-- deltarepresenta el tiempo respecto al cambio
 private  int fpsPorSegundo = FPS; //nos permite sabe a cuanto esta correiendo un juegp
