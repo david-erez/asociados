@@ -20,8 +20,8 @@ private boolean runner=false;
 private BufferStrategy bs;
 private Graphics g;
 
-private final int FPS = 1;
-private double objetivo =  1000/ FPS; //tiempo requerido para pasar fotograma
+private final int FPS = 8;
+private double objetivo =  100000000/ FPS; //tiempo requerido para pasar fotograma
 private double delta = 0; //almacena el tiempo temporal al tiempo-- deltarepresenta el tiempo respecto al cambio
 private  int fpsPorSegundo = FPS; //nos permite sabe a cuanto esta correiendo un juegp
  

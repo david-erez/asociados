@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 public class Bullet extends GameObjects {
     ArrayList<Bullet> balas = new ArrayList<>();
-  public double velocidad = 0.5;
+  public double velocidad = 9.7;
 
     public Bullet(Object position, BufferedImage texture) {
         super(position, texture);

@@ -10,6 +10,7 @@ import math.Vector2D;
 
 public class Player extends GameObjects {
     private double count = 0;
+    private double count2 = 0;
     private boolean mirandoDerecha = true;
     private int frame = 0;        
     private int animTick = 0;
@@ -26,7 +27,8 @@ public class Player extends GameObjects {
 
     @Override
     public void update() {
-        count = count + 1;
+        count = count + 10;
+        count2 = count2 + 10;
 
         // salto
         if ((KeyBoard.space || KeyBoard.up) && enElSuelo) {
@@ -49,9 +51,10 @@ public class Player extends GameObjects {
         }
 
         // disparar
-        if (KeyBoard.ei && count >= 250) {
+        if (KeyBoard.ei && count >= 100 && count2 >= 50) {
             disparar(true);
-            count = 0;
+            count= count- 50;
+            count2= count2- 58.25;
         } 
 
         // actualizar balas
