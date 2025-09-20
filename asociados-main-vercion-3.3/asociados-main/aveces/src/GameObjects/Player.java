@@ -18,6 +18,7 @@ public class Player extends GameObjects {
     private double velocidadY = 0;
     private double gravedad = 0.78;
     private boolean enElSuelo = false;
+    public int sueloY = 450;
 
     public Player(Object position, BufferedImage texture) {
         super(position, texture);
@@ -57,12 +58,21 @@ public class Player extends GameObjects {
         for (Bullet b : balas) {
             b.update();
         }
+
+        // “suelo” temporal mientras no hay colisiones
+        if (position.getY() >= sueloY) {
+            position.setY(sueloY);
+            velocidadY = 0;
+            enElSuelo = true;
+        }
     }
 
-    public void disparar(boolean activo){
-        balas.add(new Bullet(new Vector2D(
-            position.getX() + texture.getWidth(), 
-            position.getY() + texture.getHeight() / 10), 
+    public void disparar(boolean activo) {
+        balas.add(new Bullet(
+            new Vector2D(
+                position.getX() + texture.getWidth(), 
+                position.getY() + texture.getHeight() / 10
+            ), 
             Assets.bala));
     }
 
@@ -83,37 +93,25 @@ public class Player extends GameObjects {
             animTick = 0;
         }
 
-        g.drawImage(currentFrame, (int) position.getX(), (int) position.getY(), 37,37,null);
+        g.drawImage(currentFrame, (int) position.getX(), (int) position.getY(), 37, 37, null);
 
         for (Bullet b : balas) {
             b.draw(g);
         }
-            drawHitbox(g);
+
+        // dibuja la hitbox si quieres depurar:
+        drawHitbox(g);
     }
 
-    // 🔹 hitbox personalizada
+    // 🔹 define la hitbox del Player
     @Override
     public Rectangle getBounds() {
-        return new Rectangle(
-            (int) position.getX() + 5,  // offset X
-            (int) position.getY() + 5,  // offset Y
-            27,                         // ancho
-            32                          // alto
-        );
+        // offsetX, offsetY, ancho, alto
+        return createBounds(5, 5, 27, 32);
     }
 
-    // 🔹 manejar colisión con un objeto Ground
-    public void handleCollision(GameObjects ground) {
-        if (this.collidesWith(ground)) {
-            Rectangle playerBounds = this.getBounds();
-            Rectangle groundBounds = ground.getBounds();
-
-            // colocar al jugador justo encima del suelo
-            position.setY(groundBounds.y - playerBounds.height - 5);
-            velocidadY = 0;
-            enElSuelo = true;
-        } else {
-            enElSuelo = false;
-        }
+    // 🔹 para comprobar colisión con otro GameObject
+    public boolean isCollidingWith(GameObjects other) {
+        return getBounds().intersects(other.getBounds());
     }
 }
