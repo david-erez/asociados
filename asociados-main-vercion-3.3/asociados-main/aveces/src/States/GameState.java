@@ -1,12 +1,10 @@
 package States;
 
-import java.awt.Graphics;
-
-import javax.swing.JPanel;
-
-import GameObjects.Ambiente;
-import GameObjects.Player;
+import Game.Ambiente;
+import Game.Player;
 import graficos.Assets;
+import java.awt.Graphics;
+import javax.swing.JPanel;
 import math.Vector2D;
 
 public class GameState extends JPanel{

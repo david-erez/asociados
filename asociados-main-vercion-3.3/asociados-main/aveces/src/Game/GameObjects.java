@@ -1,4 +1,4 @@
-package GameObjects;
+package Game;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,10 +10,11 @@ public abstract class GameObjects {
     protected BufferedImage texture;
     protected Vector2D position;
 
-    public GameObjects(Object position, BufferedImage texture){
-        this.position = (Vector2D) position;
-        this.texture = texture;
-    }
+    public GameObjects(Vector2D position, BufferedImage texture){
+    this.position = position;
+    this.texture = texture;
+}
+
 
     public abstract void update();
     public abstract void draw(Graphics g);

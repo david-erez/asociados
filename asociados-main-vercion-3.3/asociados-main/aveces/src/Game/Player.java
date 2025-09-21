@@ -1,11 +1,11 @@
-package GameObjects;
+package Game;
 
 import graficos.Assets;
 import imput.KeyBoard;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import GameObjects.Bullet;
+import math.Vector2D;
 
 public class Player extends GameObjects {
     private boolean mirandoDerecha = true;
@@ -17,14 +17,12 @@ public class Player extends GameObjects {
     private boolean enElSuelo = false;
     public int sueloY = 450;
 
-    private Weapon Weapon;
-    private Bullet Bullet;
+    private WeaponSelected weaponS;
 
-    public Player(Object position, BufferedImage texture) {
+    public Player(Vector2D position, BufferedImage texture) {
         super(position, texture);
         
-        this.Weapon = new Weapon(4, 18, 8);
-        this.Bullet = new Bullet(position, texture, 0, 0, 0);
+        this.weaponS = new WeaponSelected(2);
     }
 
     @Override
@@ -46,24 +44,24 @@ public class Player extends GameObjects {
             animTick++;
         }
         if (KeyBoard.left) {
-            position.setX(position.getX() - 4);        
+            position.setX(position.getX() - 4);
             mirandoDerecha = false;
         }
 
         // disparar con arma (pasamos mirandoDerecha)
         if (KeyBoard.ei) {
-            weapon.tryShoot(
+            weaponS.tryShoot(
                 position.getX() + texture.getWidth(),
                 position.getY() + texture.getHeight() / 10,
                 mirandoDerecha
             );
         } else {
             // si suelta el botón, resetea la ráfaga
-            weapon.resetBurst();
+            weaponS.resetBurst();
         }
 
         // actualizar arma (reduce cooldown y actualiza balas)
-        weapon.update();
+        weaponS.update();
 
         // “suelo” temporal mientras no hay colisiones
         if (position.getY() >= sueloY) {
@@ -93,7 +91,7 @@ public class Player extends GameObjects {
         g.drawImage(currentFrame, (int) position.getX(), (int) position.getY(), 37, 37, null);
 
         // dibujar las balas del arma
-        for (Bullet b : weapon.getBullets()) {
+        for (Bullet b : weaponS.getBullets()) {
             b.draw(g);
         }
 

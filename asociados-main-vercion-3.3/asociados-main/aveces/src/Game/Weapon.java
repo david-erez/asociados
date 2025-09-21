@@ -1,4 +1,4 @@
-package GameObjects;
+package Game;
 
 import graficos.Assets;
 import java.util.ArrayList;
@@ -6,25 +6,43 @@ import math.Vector2D;
 
 public class Weapon {
 
+    private int weaponType;
     // 🔹 parámetros de disparo
-    private int fireCooldown = 0;      // ticks restantes para disparar de nuevo
-    private int baseCooldown = 4;      // disparos rápidos
-    private int maxCooldown = 18;      // disparos lentos
-    private int burstCount = 0;        // cuántas balas seguidas
-    private int burstLimit = 8;        // límite de ráfaga rápida
-    private int bulletType = 0;      // tipo de bala (0 = normal, 1 = rápida, 2 = lenta)
-
+    private int fireCooldown;      // ticks restantes para disparar de nuevo
+    private int baseCooldown;      // disparos rápidos
+    private int maxCooldown;      // disparos lentos
+    private int burstCount;        // cuántas balas seguidas
+    private int burstLimit;        // límite de ráfaga rápida
+    private double bulletSpeed = 10; // velocidad de la bala    
     // 🔹 lista de balas
     private ArrayList<Bullet> balas = new ArrayList<>();
 
-    
-    public Weapon(int baseCooldown, int maxCooldown, int burstLimit, int bulletType) {
-        this.baseCooldown = baseCooldown;
-        this.maxCooldown = maxCooldown;
-        this.burstLimit = burstLimit;
-        this.bulletType = bulletType;   
-    }
+    public Weapon(int weaponType){
+        this.weaponType = weaponType;
 
+        // configuración según tipo de arma
+        switch (weaponType) {
+            case 1: // pistola
+                baseCooldown = 15;
+                maxCooldown = 30;
+                burstLimit = 3;
+                bulletSpeed=5;
+                break;
+            case 2: // rifle
+                baseCooldown = 5;
+                maxCooldown = 20;
+                burstLimit = 10;
+                bulletSpeed=30;
+                break;
+            default: // por defecto, pistola
+                baseCooldown = 15;
+                maxCooldown = 30;
+                burstLimit = 3;
+                break;
+        }
+    }
+        
+    
     
     public void update() {
         // disminuir cooldown
@@ -36,7 +54,7 @@ public class Weapon {
         }
     }
 
-    public ArrayList<Bullet> getBullets(getBulletType()) {
+    public ArrayList<Bullet> getBullets() {
         return balas;
     }
 
@@ -71,7 +89,7 @@ public class Weapon {
                 new Vector2D(x, y),
                 Assets.bala,
                 bulletSpeed * dir, // velocidad X
-                0                  // velocidad Y (0 si horizontal)
+                0
         ));
     }
 }

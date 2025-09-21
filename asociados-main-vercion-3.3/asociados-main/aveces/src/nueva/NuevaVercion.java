@@ -24,7 +24,7 @@ private final int FPS =5;
 private double objetivo =  100000000/ FPS; //tiempo requerido para pasar fotograma
 private double delta = 0; //almacena el tiempo temporal al tiempo-- deltarepresenta el tiempo respecto al cambio
 private  int fpsPorSegundo = FPS; //nos permite sabe a cuanto esta correiendo un juegp
- 
+
 private GameState gameState;
 public KeyBoard  Keyboard;
 
@@ -55,11 +55,11 @@ public NuevaVercion (){
 
     }
 
-    double posicionY = 190; 
+    double posicionY = 190;
     double posicionX = 50.0;
     private void update(){
         Keyboard.update();
-        gameState.update(); 
+        gameState.update();
 
     }
     private void draw() {
@@ -112,12 +112,12 @@ gameState = new GameState();
             //de esta manera para poder cronometrar el tiempo
         }
         if (time >= 1000000000) {
-           fpsPorSegundo = frames;
+            fpsPorSegundo = frames;
             frames = 0;
         }
         
     }
-     stop();
+    stop();
     }
 
 //metodo para iniciar como detener el hilo principal
