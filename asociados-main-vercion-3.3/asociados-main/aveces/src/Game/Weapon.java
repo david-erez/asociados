@@ -13,7 +13,7 @@ public class Weapon {
     private int maxCooldown;      // disparos lentos
     private int burstCount;        // cuántas balas seguidas
     private int burstLimit;        // límite de ráfaga rápida
-    private double bulletSpeed = 10; // velocidad de la bala    
+    private double bulletSpeed = 10; // velocidad de la bala
     // 🔹 lista de balas
     private ArrayList<Bullet> balas = new ArrayList<>();
 
@@ -29,10 +29,10 @@ public class Weapon {
                 bulletSpeed=5;
                 break;
             case 2: // rifle
-                baseCooldown = 5;
-                maxCooldown = 20;
-                burstLimit = 10;
-                bulletSpeed=30;
+                baseCooldown = 1;
+                maxCooldown = 20000;
+                burstLimit = 1000000;
+                bulletSpeed=2;
                 break;
             default: // por defecto, pistola
                 baseCooldown = 15;

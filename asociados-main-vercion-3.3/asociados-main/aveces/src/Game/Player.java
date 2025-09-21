@@ -9,13 +9,12 @@ import math.Vector2D;
 
 public class Player extends GameObjects {
     private boolean mirandoDerecha = true;
-    private int frame = 0;        
+    private int frame = 0;
     private int animTick = 0;
 
     private double velocidadY = 0;
     private final double gravedad = 0.78;
     private boolean enElSuelo = false;
-    public int sueloY = 450;
 
     private WeaponSelected weaponS;
 
@@ -64,11 +63,7 @@ public class Player extends GameObjects {
         weaponS.update();
 
         // “suelo” temporal mientras no hay colisiones
-        if (position.getY() >= sueloY) {
-            position.setY(sueloY);
-            velocidadY = 0;
-            enElSuelo = true;
-        }
+        
     }
 
     @Override
@@ -110,4 +105,8 @@ public class Player extends GameObjects {
     public boolean isCollidingWith(GameObjects other) {
         return getBounds().intersects(other.getBounds());
     }
+    // En Player.java
+public void setVelocidadY(double v) { this.velocidadY = v; }
+public void setEnElSuelo(boolean b) { this.enElSuelo = b; }
+
 }

@@ -10,7 +10,7 @@ public class Assets {
     public static void init() {
         cubo = Loader.imageLoader("/recursos/eee.png");
         suelo = Loader.imageLoader("/recursos/pasto.png");
-         walk = new BufferedImage[] {
+        walk = new BufferedImage[] {
             Loader.imageLoader("/recursos/dereuno.png"),
             Loader.imageLoader("/recursos/deredos.png")
         };
