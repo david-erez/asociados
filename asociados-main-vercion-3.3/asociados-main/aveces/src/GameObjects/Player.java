@@ -5,31 +5,30 @@ import imput.KeyBoard;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import math.Vector2D;
+import GameObjects.Bullet;
 
 public class Player extends GameObjects {
-    private double count = 0;
-    private double count2 = 0;
     private boolean mirandoDerecha = true;
     private int frame = 0;        
     private int animTick = 0;
 
-    ArrayList<Bullet> balas = new ArrayList<>();
     private double velocidadY = 0;
-    private double gravedad = 0.78;
+    private final double gravedad = 0.78;
     private boolean enElSuelo = false;
     public int sueloY = 450;
 
+    private Weapon Weapon;
+    private Bullet Bullet;
+
     public Player(Object position, BufferedImage texture) {
         super(position, texture);
+        
+        this.Weapon = new Weapon(4, 18, 8);
+        this.Bullet = new Bullet(position, texture, 0, 0, 0);
     }
 
     @Override
     public void update() {
-        count = count + 10;
-        count2 = count2 + 10;
-
         // salto
         if ((KeyBoard.space || KeyBoard.up) && enElSuelo) {
             velocidadY = -12.5; 
@@ -48,19 +47,23 @@ public class Player extends GameObjects {
         }
         if (KeyBoard.left) {
             position.setX(position.getX() - 4);        
+            mirandoDerecha = false;
         }
 
-        // disparar
-        if (KeyBoard.ei && count >= 100 && count2 >= 50) {
-            disparar(true);
-            count= count- 50;
-            count2= count2- 58.25;
-        } 
-
-        // actualizar balas
-        for (Bullet b : balas) {
-            b.update();
+        // disparar con arma (pasamos mirandoDerecha)
+        if (KeyBoard.ei) {
+            weapon.tryShoot(
+                position.getX() + texture.getWidth(),
+                position.getY() + texture.getHeight() / 10,
+                mirandoDerecha
+            );
+        } else {
+            // si suelta el botón, resetea la ráfaga
+            weapon.resetBurst();
         }
+
+        // actualizar arma (reduce cooldown y actualiza balas)
+        weapon.update();
 
         // “suelo” temporal mientras no hay colisiones
         if (position.getY() >= sueloY) {
@@ -68,15 +71,6 @@ public class Player extends GameObjects {
             velocidadY = 0;
             enElSuelo = true;
         }
-    }
-
-    public void disparar(boolean activo) {
-        balas.add(new Bullet(
-            new Vector2D(
-                position.getX() + texture.getWidth(), 
-                position.getY() + texture.getHeight() / 10
-            ), 
-            Assets.bala));
     }
 
     @Override
@@ -98,11 +92,12 @@ public class Player extends GameObjects {
 
         g.drawImage(currentFrame, (int) position.getX(), (int) position.getY(), 37, 37, null);
 
-        for (Bullet b : balas) {
+        // dibujar las balas del arma
+        for (Bullet b : weapon.getBullets()) {
             b.draw(g);
         }
 
-        // dibuja la hitbox si quieres depurar:
+        // dibuja la hitbox si quieres depurar
         drawHitbox(g);
     }
 
