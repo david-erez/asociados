@@ -20,8 +20,8 @@ private boolean runner=false;
 private BufferStrategy bs;
 private Graphics g;
 
-private final int FPS =5;
-private double objetivo =  100000000/ FPS; //tiempo requerido para pasar fotograma
+private final int FPS = 60;
+private double objetivo =  1000000000.0 / FPS; //tiempo requerido para pasar fotograma
 private double delta = 0; //almacena el tiempo temporal al tiempo-- deltarepresenta el tiempo respecto al cambio
 private  int fpsPorSegundo = FPS; //nos permite sabe a cuanto esta correiendo un juegp
 
@@ -29,7 +29,7 @@ private GameState gameState;
 public KeyBoard  Keyboard;
 
 public NuevaVercion (){
-    setTitle("gravity");
+    setTitle("Infinity Hell");
     setSize(width, height);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setResizable(false); //esta hace que la ventama se redimencione en tiempo de ejecucion
@@ -55,11 +55,13 @@ public NuevaVercion (){
 
     }
 
-    double posicionY = 190;
+    double posicionY = 190; 
     double posicionX = 50.0;
     private void update(){
         Keyboard.update();
+        if (gameState != null) {
         gameState.update();
+    }
 
     }
     private void draw() {
@@ -75,7 +77,9 @@ public NuevaVercion (){
     g.fillRect(0, 0, width, height);
 
     // Dibuja la imagen
-    gameState.draw(g);
+   if (gameState != null) {
+        gameState.draw(g);
+    }
     // Dibuja el texto de FPS
     g.setColor(Color.BLACK);
     g.drawString("" + fpsPorSegundo, 10, 10);
@@ -111,20 +115,21 @@ gameState = new GameState();
             frames ++;
             //de esta manera para poder cronometrar el tiempo
         }
-        if (time >= 1000000000) {
-            fpsPorSegundo = frames;
+        if (time >= 1000000000.0) {
+           fpsPorSegundo = frames;
             frames = 0;
         }
         
     }
-    stop();
+     stop();
     }
 
 //metodo para iniciar como detener el hilo principal
 private void start(){
+    runner = true;
     thread = new Thread(this);//esta clase resive como parametro la interfaz runneblo
     thread.start();// esto me llama el metodo run
-    runner = true; 
+     
 }
 private void stop(){
 try {

@@ -5,9 +5,17 @@ public class WeaponSelected {
     private int selectedWeapon;
     private Weapon weapon;
     
-    public WeaponSelected(int selectedWeapon){
+    public WeaponSelected(int selectedWeapon, int typeBullet){
         this.selectedWeapon = selectedWeapon;
-        this.weapon = new Weapon(selectedWeapon);
+        this.weapon = new Weapon(selectedWeapon, typeBullet);
+    }
+
+    public void setBulletDirY(double bulletY){
+        weapon.setBulletDirY(bulletY);
+    }
+
+    public void setBulletDirX(double bulletX){
+        weapon.setBulletDirX(bulletX);
     }
 
     public void tryShoot(double x, double y, boolean mirandoDerecha){
